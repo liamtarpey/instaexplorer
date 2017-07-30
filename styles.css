@@ -1,0 +1,49 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+.map-container {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.next-button {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    display: block;
+    background: red;
+    border-radius: 10px;
+    z-index: 3;
+}
+.marker {
+    position: relative;
+    background: white;
+    width: 200px;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 12px;
+    z-index: 44;
+}
+.marker:before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 12px solid white;
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    margin-left: -6px;
+}
+.marker img {
+    display: block;
+    width: 100%;
+}
