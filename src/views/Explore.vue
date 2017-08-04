@@ -8,6 +8,7 @@
 <script>
     import fetchJsonp from 'fetch-jsonp';
     import axios from 'axios';
+    //import Popup from './Popup.vue';
 
     let vm = null;
     let instagramAccessToken = null;
