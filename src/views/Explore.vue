@@ -90,8 +90,8 @@
         el.appendChild(img);
         el.appendChild(details);
 
+        const popup = new mapboxgl.Popup({offset: 25}).setText('Construction on the Washington Monument began in 1848.');
         new mapboxgl.Marker(el, {offset:[-25, -25]}).setLngLat(location).setPopup(popup).addTo(map);
-        var popup = new mapboxgl.Popup({offset: 25}).setText('Construction on the Washington Monument began in 1848.');
 
         counter ++;
     };
