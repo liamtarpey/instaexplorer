@@ -5,10 +5,18 @@ var config = {
         filename: 'bundle.js',
         publicPath: '/dist'
     },
-    resolve: {
-        alias: {
-            vue: 'vue/dist/vue.js'
-        }
+    module: {
+        loaders: [
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader',
+                options: {
+                    loaders: {
+                        js: 'babel-loader'
+                    }
+                }
+            }
+        ]
     }
 };
 

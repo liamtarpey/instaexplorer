@@ -10,16 +10,13 @@
     </head>
     <body>
 
-        <div id="app">
-            <div id="map" class="map-container"></div>
-            <a href="#" class="next-button" v-on:click="nextPost($event)"></a>
-        </div>
-
+        <div id="app"></div>
+        
         <!-- npm install for mapbox-gl appears to be broken, temporary imports here -->
         <script src='https://api.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.js'></script>
         <link href='https://api.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.css' rel='stylesheet' />
-        
-        <script src="./token.js"></script>
+
+        <!-- <script src="./token.js"></script> -->
         <script src="./dist/bundle.js"></script>
     </body>
 </html>
