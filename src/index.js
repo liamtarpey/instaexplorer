@@ -8,8 +8,8 @@ import VueRouter from 'vue-router';
 import App from './App.vue';
 
 // Import Views
-import Auth from './views/Auth.vue';
-import Explore from './views/Explore.vue';
+import Auth from './containers/Auth.vue';
+import Explore from './containers/Explore.vue';
 
 // Use router
 Vue.use(VueRouter);

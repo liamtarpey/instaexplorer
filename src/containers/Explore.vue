@@ -6,10 +6,14 @@
 </template>
 
 <script>
+    // Libs
     import fetchJsonp from 'fetch-jsonp';
     import axios from 'axios';
-    //import Popup from './Popup.vue';
 
+    // Components
+    import Popup from '../components/Popup.vue';
+
+    // Private vars
     let vm = null;
     let instagramAccessToken = null;
     let selfEndpoint = null;
@@ -20,6 +24,7 @@
     const londonCoords = [-0.123499506, 51.504831314];
     const mapboxToken = 'pk.eyJ1IjoibGlhbXRhcnBleSIsImEiOiJKZXQyZWo4In0.IQ_GWGCoQ7tFph0iFY-aQw';
 
+    // Initialise instance of mapbox with London coordinates as default
     const loadMapbox = () => {
         mapboxgl.accessToken = mapboxToken;
         map = new mapboxgl.Map({
@@ -30,6 +35,7 @@
         });
     };
 
+    // Get all instagram data
     const getInstaData = () => {
         const onSuccess = (response) => {
             for(var i= 0, l= response.data.length; i<l; i++) {
@@ -58,6 +64,10 @@
     let img = null;
     let details = null;
 
+    /**
+     * Click handler for nextPost button
+     * @param {Event} e
+     */
     const nextPost = (e) => {
         e.preventDefault();
 
@@ -97,6 +107,7 @@
         counter ++;
     };
 
+    // Explore component
     const ExploreComponent = {
         name: 'Explore',
         data: function() {
@@ -127,5 +138,6 @@
         }
     };
 
+    // Export component
     export default ExploreComponent;
 </script>
