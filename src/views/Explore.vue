@@ -8,7 +8,6 @@
 <script>
     import fetchJsonp from 'fetch-jsonp';
     import axios from 'axios';
-    import VueRouter from 'vue-router';
 
     let vm = null;
     let instagramAccessToken = null;
@@ -38,7 +37,6 @@
                     minInstaId = response.data[i].id; // just keep updating the id until the last one
                 }
             }
-            console.log(instaData);
         };
 
         const onError = (error) => {
@@ -48,15 +46,12 @@
         let url = selfEndpoint;
         if(minInstaId) {
             url = url + '&min_id=' + minInstaId
-            console.log('min id reached: ', url);
         }
 
-        fetchJsonp(url)
-            .then(function(response) {
-                return response.json()
-            }).then(onSuccess, onError);
+        fetchJsonp(url).then(function(response) {
+            return response.json()
+        }).then(onSuccess, onError);
     };
-
 
     let el = null;
     let img = null;
@@ -95,13 +90,8 @@
         el.appendChild(img);
         el.appendChild(details);
 
-        new mapboxgl.Marker(el, {offset:[-25, -25]})
-            .setLngLat(location)
-            .setPopup(popup)
-            .addTo(map);
-
-            var popup = new mapboxgl.Popup({offset: 25})
-                .setText('Construction on the Washington Monument began in 1848.');
+        new mapboxgl.Marker(el, {offset:[-25, -25]}).setLngLat(location).setPopup(popup).addTo(map);
+        var popup = new mapboxgl.Popup({offset: 25}).setText('Construction on the Washington Monument began in 1848.');
 
         counter ++;
     };
@@ -118,7 +108,7 @@
            instagramAccessToken = vm.$route.hash;
 
            if(instagramAccessToken.indexOf('access_token') === -1) {
-               this.$router.push({ name: 'home' });
+               vm.$router.push({ name: 'home' });
                return false;
            }
 
