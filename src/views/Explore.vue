@@ -16,7 +16,8 @@
     let instaData = [];
     let counter = 0;
     let map = null;
-    const sanFrancisco = [ -122.420679, 37.772537 ];
+    let minInstaId = null;
+    const londonCoords = [-0.123499506, 51.504831314];
     const mapboxToken = 'pk.eyJ1IjoibGlhbXRhcnBleSIsImEiOiJKZXQyZWo4In0.IQ_GWGCoQ7tFph0iFY-aQw';
 
     const loadMapbox = () => {
@@ -24,7 +25,7 @@
         map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v9',
-            center: sanFrancisco,
+            center: londonCoords,
             zoom: 13
         });
     };
@@ -34,15 +35,23 @@
             for(var i= 0, l= response.data.length; i<l; i++) {
                 if(response.data[i].location) {
                     instaData.push(response.data[i]);
+                    minInstaId = response.data[i].id; // just keep updating the id until the last one
                 }
             }
+            console.log(instaData);
         };
 
         const onError = (error) => {
             console.log(error);
         };
 
-        fetchJsonp(selfEndpoint)
+        let url = selfEndpoint;
+        if(minInstaId) {
+            url = url + '&min_id=' + minInstaId
+            console.log('min id reached: ', url);
+        }
+
+        fetchJsonp(url)
             .then(function(response) {
                 return response.json()
             }).then(onSuccess, onError);
@@ -55,6 +64,11 @@
 
     const nextPost = (e) => {
         e.preventDefault();
+
+        if(counter === instaData.length && minInstaId) {
+            getInstaData();
+            return false;
+        }
 
         if(el && img) {
             el.remove();
@@ -109,7 +123,7 @@
            }
 
            instagramAccessToken = instagramAccessToken.split('=')[1];
-           selfEndpoint = 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + instagramAccessToken;
+           selfEndpoint = 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + instagramAccessToken + '&count=10000';
 
            // Init mapbox
            loadMapbox();
