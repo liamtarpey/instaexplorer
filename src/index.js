@@ -1,8 +1,7 @@
 // Import libs
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import fetchJsonp from 'fetch-jsonp';
-import axios from 'axios';
+
 // import mapboxgl from './node_modules/mapbox-gl/dist/mapbox-gl.js'; // npm install broken?
 
 // Import App
@@ -18,10 +17,12 @@ Vue.use(VueRouter);
 // Define all routes
 const routes = [
     {
+        name: 'home',
         path: '/',
         component: Auth
     },
     {
+        name: 'explore',
         path: '/explore',
         component: Explore
     }
@@ -29,7 +30,8 @@ const routes = [
 
 // Initalise router
 const router = new VueRouter({
-    routes
+    routes,
+    mode: 'history'
 });
 
 // Init app

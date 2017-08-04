@@ -6,17 +6,18 @@
 </template>
 
 <script>
+    import fetchJsonp from 'fetch-jsonp';
+    import axios from 'axios';
+    import VueRouter from 'vue-router';
 
     let vm = null;
-    //var instagramAccessToken = window.accessTokens.instagram;
-    const instagramAccessToken = 'SOMETHING';
-    const mapboxToken = 'pk.eyJ1IjoibGlhbXRhcnBleSIsImEiOiJKZXQyZWo4In0.IQ_GWGCoQ7tFph0iFY-aQw';
-    const selfEndpoint = 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + instagramAccessToken;
-
+    let instagramAccessToken = null;
+    let selfEndpoint = null;
     let instaData = [];
     let counter = 0;
     let map = null;
     const sanFrancisco = [ -122.420679, 37.772537 ];
+    const mapboxToken = 'pk.eyJ1IjoibGlhbXRhcnBleSIsImEiOiJKZXQyZWo4In0.IQ_GWGCoQ7tFph0iFY-aQw';
 
     const loadMapbox = () => {
         mapboxgl.accessToken = mapboxToken;
@@ -63,7 +64,6 @@
         location.push(instaData[counter].location.longitude);
         location.push(instaData[counter].location.latitude);
         const image = instaData[counter].images.standard_resolution.url;
-        console.log(instaData[counter]);
         map.flyTo({
             center: location
         });
@@ -95,13 +95,27 @@
     const ExploreComponent = {
         name: 'Explore',
         data: function() {
-            return {};
+            return {}
         },
         mounted: function() {
            vm = this;
 
-        //    loadMapbox();
-        //    getInstaData();
+           // Get access token from url and split
+           instagramAccessToken = vm.$route.hash;
+
+           if(instagramAccessToken.indexOf('access_token') === -1) {
+               this.$router.push({ name: 'home' });
+               return false;
+           }
+
+           instagramAccessToken = instagramAccessToken.split('=')[1];
+           selfEndpoint = 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + instagramAccessToken;
+
+           // Init mapbox
+           loadMapbox();
+
+           // Get instagram data
+           getInstaData();
         },
         methods: {
             nextPost: nextPost
