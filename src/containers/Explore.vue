@@ -1,7 +1,9 @@
 <template>
     <div>
         <div id="map" class="map-container"></div>
-        <a href="#" class="next-button" v-on:click="nextPost($event)"></a>
+        <SkipButton direction="left" callback="prevPost"></SkipButton>
+        <!-- <a href="#" class="next-button" v-on:click="nextPost($event)"></a> -->
+        <SkipButton direction="right" callback="nextPost"></SkipButton>
     </div>
 </template>
 
@@ -11,7 +13,7 @@
     import axios from 'axios';
 
     // Components
-    import Popup from '../components/Popup.vue';
+    import SkipButton from '../components/SkipButton.vue';
 
     // Private vars
     let vm = null;
@@ -63,6 +65,10 @@
     let el = null;
     let img = null;
     let details = null;
+
+    const prevPost = (e) => {
+        console.log('previous post');
+    };
 
     /**
      * Click handler for nextPost button
@@ -134,7 +140,11 @@
            getInstaData();
         },
         methods: {
+            prevPost: prevPost,
             nextPost: nextPost
+        },
+        components: {
+            SkipButton: SkipButton
         }
     };
 
