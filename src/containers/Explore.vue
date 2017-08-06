@@ -1,9 +1,9 @@
 <template>
     <div>
         <div id="map" class="map-container"></div>
-        <SkipButton direction="left" callback="prevPost"></SkipButton>
-        <!-- <a href="#" class="next-button" v-on:click="nextPost($event)"></a> -->
-        <SkipButton direction="right" callback="nextPost"></SkipButton>
+        <!-- <SkipButton direction="left" callback="prevPost"></SkipButton> -->
+        <a href="#" class="next-button" v-on:click="nextPost($event)"></a>
+        <!-- <SkipButton direction="right" callback="nextPost"></SkipButton> -->
     </div>
 </template>
 
@@ -14,6 +14,7 @@
 
     // Components
     import SkipButton from '../components/SkipButton.vue';
+    import postpopup from '../components/PostPopup.vue';
 
     // Private vars
     let vm = null;
@@ -94,18 +95,19 @@
             center: location
         });
 
-        el = document.createElement('div');
-        img = document.createElement('img');
-        details = document.createElement('div');
-
-        details.innerHTML = '<p>' + instaData[counter].caption.text + '</p>';
-
-        el.id = 'marker-' + counter;
-        el.className = 'marker';
-        img.src = image;
-
-        el.appendChild(img);
-        el.appendChild(details);
+        el = document.createElement('postpopup');
+        // el = document.createElement('div');
+        // img = document.createElement('img');
+        // details = document.createElement('div');
+        //
+        // details.innerHTML = '<p>' + instaData[counter].caption.text + '</p>';
+        //
+        // el.id = 'marker-' + counter;
+        // el.className = 'marker';
+        // img.src = image;
+        //
+        // el.appendChild(img);
+        // el.appendChild(details);
 
         const popup = new mapboxgl.Popup({offset: 25}).setText('Construction on the Washington Monument began in 1848.');
         new mapboxgl.Marker(el, {offset:[-25, -25]}).setLngLat(location).setPopup(popup).addTo(map);
@@ -144,7 +146,8 @@
             nextPost: nextPost
         },
         components: {
-            SkipButton: SkipButton
+            SkipButton: SkipButton,
+            postpopup: postpopup
         }
     };
 
