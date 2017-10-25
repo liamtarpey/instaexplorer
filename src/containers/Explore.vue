@@ -1,156 +1,98 @@
 <template>
     <div>
-        <div id="map" class="map-container"></div>
-        <!-- <SkipButton direction="left" callback="prevPost"></SkipButton> -->
+        <Mapbox markers=""></Mapbox>
         <a href="#" class="next-button" v-on:click="nextPost($event)"></a>
-        <!-- <SkipButton direction="right" callback="nextPost"></SkipButton> -->
     </div>
 </template>
 
 <script>
-    // Libs
-    import fetchJsonp from 'fetch-jsonp';
+    import _ from 'lodash';
     import axios from 'axios';
-
-    // Components
-    import SkipButton from '../components/SkipButton.vue';
-    import postpopup from '../components/PostPopup.vue';
+    import fetchJsonp from 'fetch-jsonp';
+    import EndpointBuilder from '../common/endpoint-builder.js';
+    import Mapbox from '../components/Mapbox.vue';
 
     // Private vars
-    let vm = null;
     let instagramAccessToken = null;
-    let selfEndpoint = null;
-    let instaData = [];
-    let counter = 0;
-    let map = null;
-    let minInstaId = null;
-    const londonCoords = [-0.123499506, 51.504831314];
-    const mapboxToken = 'pk.eyJ1IjoibGlhbXRhcnBleSIsImEiOiJKZXQyZWo4In0.IQ_GWGCoQ7tFph0iFY-aQw';
 
-    // Initialise instance of mapbox with London coordinates as default
-    const loadMapbox = () => {
-        mapboxgl.accessToken = mapboxToken;
-        map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v9',
-            center: londonCoords,
-            zoom: 13
+    /**
+     * Add each marker returned by instagram to the map.
+     * @param {Object} data object | contains each instagram checkin
+     */
+    const addMarkers = (data) => {
+        _.each(data, function(marker) {
+            if(marker.location) {
+                let el = document.createElement('mapmarker');
+                el.setAttribute('post-id', marker.id);
+                el.className = 'custom-marker';
+                new mapboxgl.Marker(el)
+                    .setLngLat([marker.location.longitude, marker.location.latitude])
+                    .addTo(map);
+            }
         });
     };
 
-    // Get all instagram data
-    const getInstaData = () => {
+    /**
+     * Gets all instagram data
+     * We fetch with JsonP as this is only supported
+     * On success we call our addMarkers function that displays
+     * each marker on our map.
+     */
+    const getInstagramData = () => {
         const onSuccess = (response) => {
-            for(var i= 0, l= response.data.length; i<l; i++) {
-                if(response.data[i].location) {
-                    instaData.push(response.data[i]);
-                    minInstaId = response.data[i].id; // just keep updating the id until the last one
-                }
-            }
+            addMarkers(response.data);
         };
 
         const onError = (error) => {
             console.log(error);
         };
 
-        let url = selfEndpoint;
-        if(minInstaId) {
-            url = url + '&min_id=' + minInstaId
-        }
+        // Build endpoint
+        const Endpoint = new EndpointBuilder();
+        let url = Endpoint.build('instagram', 'self');
+        url += '?access_token=' + instagramAccessToken;
 
+        // Fetch all instagram data
         fetchJsonp(url).then(function(response) {
-            return response.json()
+            return response.json();
         }).then(onSuccess, onError);
     };
 
-    let el = null;
-    let img = null;
-    let details = null;
-
-    const prevPost = (e) => {
-        console.log('previous post');
-    };
-
-    /**
-     * Click handler for nextPost button
-     * @param {Event} e
-     */
-    const nextPost = (e) => {
-        e.preventDefault();
-
-        if(counter === instaData.length && minInstaId) {
-            getInstaData();
-            return false;
-        }
-
-        if(el && img) {
-            el.remove();
-        }
-
-        let location = [];
-        location.push(instaData[counter].location.longitude);
-        location.push(instaData[counter].location.latitude);
-        const image = instaData[counter].images.standard_resolution.url;
-        map.flyTo({
-            center: location
-        });
-
-        el = document.createElement('postpopup');
-        // el = document.createElement('div');
-        // img = document.createElement('img');
-        // details = document.createElement('div');
-        //
-        // details.innerHTML = '<p>' + instaData[counter].caption.text + '</p>';
-        //
-        // el.id = 'marker-' + counter;
-        // el.className = 'marker';
-        // img.src = image;
-        //
-        // el.appendChild(img);
-        // el.appendChild(details);
-
-        const popup = new mapboxgl.Popup({offset: 25}).setText('Construction on the Washington Monument began in 1848.');
-        new mapboxgl.Marker(el, {offset:[-25, -25]}).setLngLat(location).setPopup(popup).addTo(map);
-
-        counter ++;
-    };
-
-    // Explore component
-    const ExploreComponent = {
-        name: 'Explore',
-        data: function() {
-            return {}
-        },
+    export default {
         mounted: function() {
-           vm = this;
 
-           // Get access token from url and split
-           instagramAccessToken = vm.$route.hash;
+            // Get access token from url and split
+            instagramAccessToken = this.$route.hash;
 
-           if(instagramAccessToken.indexOf('access_token') === -1) {
-               vm.$router.push({ name: 'home' });
+            // Redirect home if no token is found
+            if(!_.includes(instagramAccessToken, 'access_token')) {
+               this.$router.push({ name: 'home' });
                return false;
-           }
+            }
 
-           instagramAccessToken = instagramAccessToken.split('=')[1];
-           selfEndpoint = 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + instagramAccessToken + '&count=10000';
+            // Store access token
+            instagramAccessToken = instagramAccessToken.split('=')[1];
 
-           // Init mapbox
-           loadMapbox();
-
-           // Get instagram data
-           getInstaData();
+            getInstagramData();
         },
-        methods: {
-            prevPost: prevPost,
-            nextPost: nextPost
+        data: {
+
         },
         components: {
-            SkipButton: SkipButton,
-            postpopup: postpopup
+            Mapbox
         }
     };
-
-    // Export component
-    export default ExploreComponent;
 </script>
+
+<style media="screen">
+    .custom-marker {
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 100%;
+        background: red;
+    }
+    .custom-marker:hover {
+        cursor: pointer;
+    }
+</style>

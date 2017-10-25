@@ -1,3 +1,4 @@
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var config = {
     entry: './src/index.js',
     output: {
@@ -17,6 +18,14 @@ var config = {
                 }
             }
         ]
+    },
+    plugins: [
+        new ExtractTextPlugin("style.css")
+    ],
+    resolve: {
+        alias: {
+            vue: 'vue/dist/vue.js'
+        }
     }
 };
 
