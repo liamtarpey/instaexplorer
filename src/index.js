@@ -1,17 +1,11 @@
-// Import libs
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-
-// import mapboxgl from './node_modules/mapbox-gl/dist/mapbox-gl.js'; // npm install broken?
-
-// Import App
+import { store } from './store/store.js';
 import App from './App.vue';
+import Authentication from './containers/authentication.component.js';
+import Explore from './containers/explore.component.js';
+import './styles/_imports.scss';
 
-// Import Views
-import Auth from './containers/Auth.vue';
-import Explore from './containers/Explore.vue';
-
-// Use router
 Vue.use(VueRouter);
 
 // Define all routes
@@ -19,7 +13,7 @@ const routes = [
     {
         name: 'home',
         path: '/',
-        component: Auth
+        component: Authentication
     },
     {
         name: 'explore',
@@ -37,6 +31,7 @@ const router = new VueRouter({
 // Init app
 const app = new Vue({
     el: '#app',
+    store,
     router,
     render: h => h(App)
 });

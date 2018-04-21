@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-axios.interceptors.request.use(function (config) {
+axios.interceptors.request.use( (config) => {
     // Do something before request is sent
     console.log('config', config);
     return config;
-}, function (error) {
+}, (error) => {
     // Do something with request error
     return Promise.reject(error);
 });

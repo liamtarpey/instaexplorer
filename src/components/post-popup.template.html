@@ -1,0 +1,15 @@
+<div class="post-popup">
+	<div class="post-popup__inner panel">
+		<img class="post-popup__image" :src="marker.images.standard_resolution.url" />
+		<div class="post-popup__info">
+			<div class="post-popup__user">
+				<img class="post-popup__avatar" :src="marker.user.profile_picture" />
+				<div class="post-popup__avatar-info">
+					<p>{{ marker.user.username }}</p>
+					<p>{{ marker.location.name }}</p>
+				</div>
+			</div>
+		</div>
+		<a href="#" v-on:click="unmountPopup()">CLOSE</a>
+	</div>
+</div>

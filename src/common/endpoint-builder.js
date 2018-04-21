@@ -9,5 +9,5 @@ export default class Endpoint {
         }
 
         return Endpoints[type][endpoint];
-    }
+    };
 };

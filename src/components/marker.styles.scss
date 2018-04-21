@@ -1,0 +1,11 @@
+.marker {
+	position: relative;
+	width: 15px;
+	height: 15px;
+	border-radius: 100%;
+	background-color: $color-red-base;
+
+	&:hover {
+		cursor: pointer;
+	}
+}

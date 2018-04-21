@@ -1,0 +1,45 @@
+.post-popup {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 100px 200px;
+	background-color: rgba(0,0,0,0.6);
+	z-index: 2;
+}
+
+.post-popup__inner {
+	display: flex;
+	height: 100%;
+}
+
+.post-popup__image {
+	display: block;
+    height: 100%;
+    max-width: 50%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.post-popup__info {
+	margin-left: auto;
+	padding: 20px;
+}
+
+// Avatar area
+.post-popup__user {
+	display: flex;
+	width: 300px;
+	border-bottom: 1px solid #f2f2f2;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+}
+
+.post-popup__avatar {
+	display: block;
+	width: 40px;
+	height: 40px;
+	margin-right: 20px;
+	border-radius: 100%;
+}
